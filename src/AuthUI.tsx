@@ -12,9 +12,27 @@ const AuthUI: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    // Initialize Google Sign-In
+    // Load Google script once
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = 'https://accounts.google.com/gsi/client';
+        script.async = true;
+        document.body.appendChild(script);
+        return () => {
+            if (document.body.contains(script)) {
+                document.body.removeChild(script);
+            }
+        };
+    }, []);
+
+    // Re-render Google button when mode changes
     useEffect(() => {
         /* global google */
+        const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+        if (!clientId || clientId.includes('YOUR_GOOGLE') || !window.google) {
+            return;
+        }
+
         const handleGoogleResponse = async (response: any) => {
             setIsLoading(true);
             setError(null);
@@ -39,40 +57,24 @@ const AuthUI: React.FC = () => {
             }
         };
 
-        // Load Google script dynamically
-        const script = document.createElement('script');
-        script.src = 'https://accounts.google.com/gsi/client';
-        script.async = true;
-        script.onload = () => {
-            const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-            if (!clientId || clientId.includes('YOUR_GOOGLE')) {
-                console.warn('Google Client ID is missing or invalid.');
-                return;
+        // @ts-ignore
+        google.accounts.id.initialize({
+            client_id: clientId,
+            callback: handleGoogleResponse,
+        });
+
+        // @ts-ignore
+        google.accounts.id.renderButton(
+            document.getElementById('google-btn'),
+            {
+                theme: 'filled_black',
+                size: 'large',
+                width: 380, // Number instead of string
+                shape: 'pill',
+                text: mode === 'login' ? 'signin_with' : 'signup_with'
             }
-
-            // @ts-ignore
-            google.accounts.id.initialize({
-                client_id: clientId,
-                callback: handleGoogleResponse,
-            });
-            // @ts-ignore
-            google.accounts.id.renderButton(
-                document.getElementById('google-btn'),
-                {
-                    theme: 'filled_black',
-                    size: 'large',
-                    width: '380',
-                    shape: 'pill',
-                    text: mode === 'login' ? 'signin_with' : 'signup_with'
-                }
-            );
-        };
-        document.body.appendChild(script);
-
-        return () => {
-            document.body.removeChild(script);
-        };
-    }, [setAuthUser]);
+        );
+    }, [mode, setAuthUser]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -144,6 +146,7 @@ const AuthUI: React.FC = () => {
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: mode === 'login' ? 20 : -20 }}
                             transition={{ duration: 0.2 }}
+                            className="auth-inputs-wrapper"
                         >
                             {mode === 'signup' && (
                                 <div className="form-group">
