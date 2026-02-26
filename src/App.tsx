@@ -15,6 +15,7 @@ const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isSyncing, setIsSyncing] = useState(false);
+  const isLoaded = React.useRef(false);
 
   // Fetch todos on load
   useEffect(() => {
@@ -24,9 +25,12 @@ const App: React.FC = () => {
         if (response.ok) {
           const data = await response.json();
           setTodos(data);
+          isLoaded.current = true;
         }
       } catch (error) {
         console.error('Failed to fetch todos:', error);
+        // Even if fetch fails, we mark as loaded to allow local changes to sync
+        isLoaded.current = true;
       }
     };
     fetchTodos();
@@ -35,7 +39,7 @@ const App: React.FC = () => {
   // Save todos whenever they change
   useEffect(() => {
     const saveTodos = async () => {
-      if (todos.length === 0 && !isSyncing) return; // Avoid clearing on first load check
+      if (!isLoaded.current) return;
 
       setIsSyncing(true);
       try {
