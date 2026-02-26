@@ -58,7 +58,13 @@ const AuthUI: React.FC = () => {
             // @ts-ignore
             google.accounts.id.renderButton(
                 document.getElementById('google-btn'),
-                { theme: 'outline', size: 'large', width: '100%', text: 'continue_with' }
+                {
+                    theme: 'filled_black',
+                    size: 'large',
+                    width: '380',
+                    shape: 'pill',
+                    text: mode === 'login' ? 'signin_with' : 'signup_with'
+                }
             );
         };
         document.body.appendChild(script);

@@ -253,7 +253,16 @@
 .google-container {
   display: flex;
   justify-content: center;
-  min-height: 40px;
+  min-height: 44px;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.google-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .logout-icon-btn {
@@ -321,6 +330,7 @@
   color: var(--text-main);
   border-color: var(--primary);
 }
+
 /* Custom Auth UI Fixes */
 .auth-tabs {
   display: flex;
@@ -357,7 +367,7 @@
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
 .form-group {
