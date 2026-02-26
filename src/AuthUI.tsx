@@ -3,6 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, User, ArrowRight } from 'lucide-react';
 import { useAuth } from './AuthContext';
 
+declare global {
+    interface Window {
+        google: any;
+    }
+}
+declare const google: any;
+
 const AuthUI: React.FC = () => {
     const { login: setAuthUser } = useAuth();
     const [mode, setMode] = useState<'login' | 'signup'>('login');
