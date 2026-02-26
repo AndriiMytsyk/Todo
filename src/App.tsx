@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Trash2, CheckCircle, Circle, Github } from 'lucide-react';
+import { Plus, Trash2, CheckCircle, Circle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import './App.css';
 
@@ -128,11 +128,6 @@ const App: React.FC = () => {
         </AnimatePresence>
       </div>
 
-      <footer className="footer">
-        <a href="#" className="footer-link">
-          <Github size={16} /> <span>Built with Antigravity</span>
-        </a>
-      </footer>
     </div>
   );
 };
