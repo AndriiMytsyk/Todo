@@ -98,6 +98,11 @@
   margin-top: 0.5rem;
 }
 
+.sync-badge.error {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
 .input-group {
   display: flex;
   gap: 0.75rem;

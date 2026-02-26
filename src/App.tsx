@@ -51,6 +51,7 @@ const TodoAuthenticatedApp: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isSyncing, setIsSyncing] = useState(false);
+  const [syncError, setSyncError] = useState<string | null>(null);
   const isLoaded = React.useRef(false);
 
   // Fetch todos on load
@@ -65,9 +66,15 @@ const TodoAuthenticatedApp: React.FC = () => {
           const data = await response.json();
           setTodos(data);
           isLoaded.current = true;
+          setSyncError(null);
+        } else {
+          const errData = await response.json();
+          setSyncError(errData.error || 'Failed to load tasks');
+          isLoaded.current = true;
         }
       } catch (error) {
         console.error('Failed to fetch todos:', error);
+        setSyncError('Network error while syncing');
         isLoaded.current = true;
       }
     };
@@ -80,9 +87,10 @@ const TodoAuthenticatedApp: React.FC = () => {
       if (!isLoaded.current) return;
 
       setIsSyncing(true);
+      setSyncError(null);
       try {
         const token = await getToken();
-        await fetch('/api/todos', {
+        const response = await fetch('/api/todos', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -90,8 +98,14 @@ const TodoAuthenticatedApp: React.FC = () => {
           },
           body: JSON.stringify({ todos }),
         });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          setSyncError(errData.error || 'Failed to save tasks');
+        }
       } catch (error) {
         console.error('Failed to save todos:', error);
+        setSyncError('Cloud sync failed');
       } finally {
         setTimeout(() => setIsSyncing(false), 800);
       }
@@ -189,6 +203,16 @@ const TodoAuthenticatedApp: React.FC = () => {
               className="sync-badge"
             >
               Cloud Synced
+            </motion.div>
+          )}
+          {syncError && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="sync-badge error"
+            >
+              {syncError}
             </motion.div>
           )}
         </AnimatePresence>
