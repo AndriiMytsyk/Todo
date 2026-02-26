@@ -23,9 +23,14 @@ export default async function handler(
 
     // 2. Verify Authentication
     try {
-        const { userId } = await clerk.authenticateRequest(request);
+        const requestState = await clerk.authenticateRequest(request as any);
+        const userId = (requestState as any).userId || (requestState.toAuth() as any).userId;
+
         if (!userId) {
-            return response.status(401).json({ error: 'Unauthorized: No valid session found.' });
+            return response.status(401).json({
+                error: 'Unauthorized: No valid session found.',
+                details: 'Please ensure you are logged in and the request includes valid Clerk credentials.'
+            });
         }
 
         const { method } = request;
