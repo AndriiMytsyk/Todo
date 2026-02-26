@@ -4,6 +4,8 @@ import { Plus, Trash2, CheckCircle, Circle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import './App.css';
 
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser, useAuth } from "@clerk/clerk-react";
+
 interface Todo {
   id: string;
   text: string;
@@ -12,6 +14,40 @@ interface Todo {
 }
 
 const App: React.FC = () => {
+  return (
+    <div className="app-container">
+      <SignedOut>
+        <div className="auth-hero">
+          <header>
+            <motion.h1
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="title"
+            >
+              TaskFlow
+            </motion.h1>
+            <p className="subtitle">Premium Productivity</p>
+          </header>
+          <div className="glass-card auth-card">
+            <h2>Welcome to TaskFlow</h2>
+            <p>Sign in to sync your tasks across all your devices with cloud persistence.</p>
+            <SignInButton mode="modal">
+              <button className="add-btn login-btn">Get Started</button>
+            </SignInButton>
+          </div>
+        </div>
+      </SignedOut>
+
+      <SignedIn>
+        <TodoAuthenticatedApp />
+      </SignedIn>
+    </div>
+  );
+};
+
+const TodoAuthenticatedApp: React.FC = () => {
+  const { user } = useUser();
+  const { getToken } = useAuth();
   const [todos, setTodos] = useState<Todo[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isSyncing, setIsSyncing] = useState(false);
@@ -21,7 +57,10 @@ const App: React.FC = () => {
   useEffect(() => {
     const fetchTodos = async () => {
       try {
-        const response = await fetch('/api/todos');
+        const token = await getToken();
+        const response = await fetch('/api/todos', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         if (response.ok) {
           const data = await response.json();
           setTodos(data);
@@ -29,12 +68,11 @@ const App: React.FC = () => {
         }
       } catch (error) {
         console.error('Failed to fetch todos:', error);
-        // Even if fetch fails, we mark as loaded to allow local changes to sync
         isLoaded.current = true;
       }
     };
     fetchTodos();
-  }, []);
+  }, [getToken]);
 
   // Save todos whenever they change
   useEffect(() => {
@@ -43,9 +81,13 @@ const App: React.FC = () => {
 
       setIsSyncing(true);
       try {
+        const token = await getToken();
         await fetch('/api/todos', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
           body: JSON.stringify({ todos }),
         });
       } catch (error) {
@@ -57,7 +99,7 @@ const App: React.FC = () => {
 
     const timeoutId = setTimeout(saveTodos, 1000);
     return () => clearTimeout(timeoutId);
-  }, [todos]);
+  }, [todos, getToken]);
 
   const addTodo = (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,16 +171,15 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="app-container">
-      <header>
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="title"
-        >
-          TaskFlow
-        </motion.h1>
-        <p className="subtitle">Premium Productivity</p>
+    <>
+      <header className="auth-header">
+        <div className="user-profile">
+          <UserButton appearance={{ elements: { userButtonAvatarBox: "user-avatar" } }} />
+          <div className="user-info">
+            <span className="user-name">Hello, {user?.firstName || 'Productivity Master'}</span>
+            <p className="subtitle">Premium Account</p>
+          </div>
+        </div>
         <AnimatePresence>
           {isSyncing && (
             <motion.div
@@ -147,7 +188,7 @@ const App: React.FC = () => {
               exit={{ opacity: 0 }}
               className="sync-badge"
             >
-              Syncing to Cloud...
+              Cloud Synced
             </motion.div>
           )}
         </AnimatePresence>
@@ -184,7 +225,7 @@ const App: React.FC = () => {
         </AnimatePresence>
       </div>
 
-    </div>
+    </>
   );
 };
 
