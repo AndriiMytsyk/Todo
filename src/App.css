@@ -321,3 +321,53 @@
   color: var(--text-main);
   border-color: var(--primary);
 }
+/* Custom Auth UI Fixes */
+.auth-tabs {
+  display: flex;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 6px;
+  margin-bottom: 2rem;
+}
+
+.auth-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-tab.active {
+  background: rgba(59, 130, 246, 0.2);
+  color: white;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.15);
+}
+
+.custom-auth {
+  max-width: 420px;
+  width: 100%;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.form-icon {
+  position: absolute;
+  left: 1rem;
+  color: rgba(255, 255, 255, 0.3);
+}
