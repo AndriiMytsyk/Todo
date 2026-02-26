@@ -46,7 +46,7 @@ const AuthUI: React.FC = () => {
         script.onload = () => {
             // @ts-ignore
             google.accounts.id.initialize({
-                client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com', // Placeholder, user will provide
+                client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID || 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
                 callback: handleGoogleResponse,
             });
             // @ts-ignore
