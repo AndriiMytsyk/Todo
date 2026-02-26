@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, CheckCircle, Circle } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -14,6 +14,46 @@ interface Todo {
 const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [inputValue, setInputValue] = useState('');
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  // Fetch todos on load
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const response = await fetch('/api/todos');
+        if (response.ok) {
+          const data = await response.json();
+          setTodos(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch todos:', error);
+      }
+    };
+    fetchTodos();
+  }, []);
+
+  // Save todos whenever they change
+  useEffect(() => {
+    const saveTodos = async () => {
+      if (todos.length === 0 && !isSyncing) return; // Avoid clearing on first load check
+
+      setIsSyncing(true);
+      try {
+        await fetch('/api/todos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ todos }),
+        });
+      } catch (error) {
+        console.error('Failed to save todos:', error);
+      } finally {
+        setTimeout(() => setIsSyncing(false), 800);
+      }
+    };
+
+    const timeoutId = setTimeout(saveTodos, 1000);
+    return () => clearTimeout(timeoutId);
+  }, [todos]);
 
   const addTodo = (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,6 +135,18 @@ const App: React.FC = () => {
           TaskFlow
         </motion.h1>
         <p className="subtitle">Premium Productivity</p>
+        <AnimatePresence>
+          {isSyncing && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="sync-badge"
+            >
+              Syncing to Cloud...
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       <form onSubmit={addTodo} className="input-group">

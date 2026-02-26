@@ -25,6 +25,17 @@ header {
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
+  margin-bottom: 0.5rem;
+}
+
+.sync-badge {
+  font-size: 0.75rem;
+  color: var(--accent-blue);
+  background: rgba(59, 130, 246, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  display: inline-block;
+  margin-top: 0.5rem;
 }
 
 .input-group {
