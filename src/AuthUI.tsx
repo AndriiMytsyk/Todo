@@ -195,7 +195,11 @@ const AuthUI: React.FC = () => {
                     <span>or</span>
                 </div>
 
-                <div id="google-btn" className="google-container"></div>
+                <div
+                    key={`${mode}-google`}
+                    id="google-btn"
+                    className="google-container"
+                ></div>
             </motion.div>
         </div>
     );
