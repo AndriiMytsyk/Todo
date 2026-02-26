@@ -1,0 +1,153 @@
+.app-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+header {
+  text-align: center;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  background: linear-gradient(to right, #818cf8, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.input-group {
+  display: flex;
+  gap: 0.75rem;
+  background: var(--card-bg);
+  padding: 0.75rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-xl);
+}
+
+.todo-input {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+.add-btn {
+  background: var(--primary);
+  color: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-btn:hover {
+  background: var(--primary-hover);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--card-bg);
+  border-radius: 1.25rem;
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+}
+
+.todo-item.completed {
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.todo-text {
+  flex: 1;
+  font-size: 1.05rem;
+  transition: all 0.3s ease;
+}
+
+.completed .todo-text {
+  color: var(--text-muted);
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.check-btn {
+  color: var(--text-muted);
+}
+
+.completed .check-btn {
+  color: var(--accent-success);
+}
+
+.delete-btn {
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.todo-item:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn:hover {
+  color: #ef4444;
+}
+
+.pulse-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--accent-success);
+  pointer-events: none;
+}
+
+.footer {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.footer-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  background: var(--card-bg);
+  border-radius: 2rem;
+  border: 1px solid var(--glass-border);
+  transition: all 0.2s ease;
+}
+
+.footer-link:hover {
+  color: var(--text-main);
+  border-color: var(--primary);
+}
