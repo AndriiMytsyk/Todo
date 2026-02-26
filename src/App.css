@@ -11,8 +11,10 @@
   padding: 3rem 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  max-width: 400px;
+  gap: 2rem;
+  /* Increased base gap for better separation */
+  max-width: 420px;
+  width: 100%;
 }
 
 .auth-card h2 {
@@ -203,6 +205,18 @@
   pointer-events: none;
 }
 
+.form-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  /* Additional bottom margin for input groups */
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
 .form-group input {
   width: 100%;
   background: rgba(255, 255, 255, 0.05);
@@ -211,7 +225,7 @@
   padding: 1rem 1rem 1rem 3rem;
   color: white;
   font-size: 1rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .form-group input:focus {
@@ -381,9 +395,11 @@
   left: 1rem;
   color: rgba(255, 255, 255, 0.3);
 }
+
 .auth-inputs-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem; /* Precise 24px gap between inputs */
+  gap: 1.5rem;
+  /* Precise 24px gap between inputs */
   margin-bottom: 1.5rem;
 }

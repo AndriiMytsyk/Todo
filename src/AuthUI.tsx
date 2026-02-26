@@ -75,7 +75,7 @@ const AuthUI: React.FC = () => {
                     size: 'large',
                     width: 380,
                     shape: 'pill',
-                    text: mode === 'login' ? 'signin' : 'signup'
+                    text: mode === 'login' ? 'signin_with' : 'signup_with'
                 }
             );
         }
