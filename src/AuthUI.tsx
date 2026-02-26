@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, User, UserPlus, ArrowRight } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight } from 'lucide-react';
 import { useAuth } from './AuthContext';
 
 const AuthUI: React.FC = () => {
-    const { login: setAuthUser, checkAuth } = useAuth();
+    const { login: setAuthUser } = useAuth();
     const [mode, setMode] = useState<'login' | 'signup'>('login');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
