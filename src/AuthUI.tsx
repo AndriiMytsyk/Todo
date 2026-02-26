@@ -44,9 +44,15 @@ const AuthUI: React.FC = () => {
         script.src = 'https://accounts.google.com/gsi/client';
         script.async = true;
         script.onload = () => {
+            const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+            if (!clientId || clientId.includes('YOUR_GOOGLE')) {
+                console.warn('Google Client ID is missing or invalid.');
+                return;
+            }
+
             // @ts-ignore
             google.accounts.id.initialize({
-                client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID || 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
+                client_id: clientId,
                 callback: handleGoogleResponse,
             });
             // @ts-ignore
