@@ -381,3 +381,9 @@
   left: 1rem;
   color: rgba(255, 255, 255, 0.3);
 }
+.auth-inputs-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Precise 24px gap between inputs */
+  margin-bottom: 1.5rem;
+}
