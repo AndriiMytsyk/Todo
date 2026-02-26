@@ -64,16 +64,21 @@ const AuthUI: React.FC = () => {
         });
 
         // @ts-ignore
-        google.accounts.id.renderButton(
-            document.getElementById('google-btn'),
-            {
-                theme: 'filled_black',
-                size: 'large',
-                width: 380, // Number instead of string
-                shape: 'pill',
-                text: mode === 'login' ? 'signin_with' : 'signup_with'
-            }
-        );
+        const container = document.getElementById('google-btn');
+        if (container && window.google) {
+            container.innerHTML = ''; // Clear previous button instance
+            // @ts-ignore
+            google.accounts.id.renderButton(
+                container,
+                {
+                    theme: 'filled_black',
+                    size: 'large',
+                    width: 380,
+                    shape: 'pill',
+                    text: mode === 'login' ? 'signin' : 'signup'
+                }
+            );
+        }
     }, [mode, setAuthUser]);
 
     const handleSubmit = async (e: React.FormEvent) => {
